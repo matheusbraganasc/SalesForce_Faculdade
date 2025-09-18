@@ -3,30 +3,38 @@
         <div class="slds-p-around_medium">
 
             <lightning-input
-                label="Nome do Professor"
-                value={nomeProfessor}
-                onchange={handleChangeProfessor}>
-            </lightning-input>
-
-            <lightning-input
                 label="Nome do Curso"
                 value={nomeCurso}
                 onchange={handleChangeCurso}>
             </lightning-input>
+            <lightning-button label="Criar Curso" variant="success" onclick={criarSomenteCurso} class="slds-m-bottom_medium"></lightning-button>
+
+            <hr/>
+
+            <lightning-input
+                label="Nome do Professor"
+                value={nomeProfessor}
+                onchange={handleChangeProfessor}>
+            </lightning-input>
+            <lightning-button label="Criar Professor" variant="neutral" onclick={criarSomenteProfessor} class="slds-m-bottom_medium"></lightning-button>
+
+            <hr/>
 
             <lightning-combobox
-                label="Selecionar Professor (para criar apenas curso)"
+                label="Selecionar Professor"
                 value={professorId}
                 options={professorOptions}
                 onchange={handleSelectProfessor}>
             </lightning-combobox>
 
-            <div class="slds-m-top_medium">
-                <lightning-button label="Criar Professor + Curso" variant="brand" onclick={criarProfessorECurso}></lightning-button>
-                <lightning-button label="Criar Só Professor" variant="neutral" onclick={criarSomenteProfessor} class="slds-m-left_small"></lightning-button>
-                <lightning-button label="Criar Só Curso" variant="success" onclick={criarSomenteCurso} class="slds-m-left_small"></lightning-button>
-            </div>
+            <lightning-combobox
+                label="Selecionar Curso"
+                value={cursoId}
+                options={cursoOptions}
+                onchange={handleSelectCurso}>
+            </lightning-combobox>
 
+            <lightning-button label="Vincular Professor ao Curso" variant="brand" onclick={relacionar}></lightning-button>
         </div>
     </lightning-card>
 </template>

@@ -1,31 +1,27 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, wire, track } from 'lwc';
 import getProfessores from '@salesforce/apex/ProfessorController.getProfessores';
 
 export default class ProfList extends LightningElement {
-    @track data = [];
-    @track columns = [
-        {
-            type: 'text',
-            fieldName: 'Name',
-            label: 'Professor / Curso'
-        }
+    @track professores = [];
+    columns = [
+        { label: 'Nome do Professor', fieldName: 'Name' },
+        { label: 'Curso', fieldName: 'Curso' } // campo único agora
     ];
 
     @wire(getProfessores)
-    wiredProfessores({ error, data }) {
+    wiredProfessores({ data, error }) {
         if (data) {
-            this.data = data.map(prof => {
-                return {
-                    Id: prof.Id,
-                    Name: prof.Name,
-                    _children: prof.Cursos__r ? prof.Cursos__r.map(c => ({
-                        Id: c.Id,
-                        Name: c.Name
-                    })) : []
-                };
-            });
+            this.professores = data.map(prof => ({
+                Id: prof.Id,
+                Name: prof.Name,
+                Curso: prof.curso__r ? prof.curso__r.Name : 'Nenhum curso'
+            }));
         } else if (error) {
-            console.error('Erro ao carregar professores:', error);
+            console.error('Erro ao buscar professores:', error);
         }
+    }
+
+    get hasProfessores() {
+        return this.professores && this.professores.length > 0;
     }
 }
