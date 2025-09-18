@@ -1,0 +1,9 @@
+<template>
+    <lightning-card title="Faculdade - Gestão de Alunos">
+        <div class="slds-p-around_medium">
+            <c-aluno-form onalunosaved={handleAlunoSaved}></c-aluno-form>
+            <hr class="slds-m-vertical_medium"/>
+            <c-aluno-list lwc:ref="alunoList"></c-aluno-list>
+        </div>
+    </lightning-card>
+</template>

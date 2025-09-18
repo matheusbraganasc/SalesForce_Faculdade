@@ -1,0 +1,18 @@
+<template>
+    <lightning-card title="Novo Aluno">
+        <div class="slds-m-around_medium">
+            <lightning-input label="Nome" value={nome} onchange={handleFilterNome}></lightning-input>
+
+            <lightning-input label="Professor" value={professor} onchange={handleFilterProfessor}></lightning-input>
+
+            <lightning-combobox
+                label="Status da Matrícula"
+                value={Status}
+                options={options}
+                onchange={handleFilterStatus}>
+            </lightning-combobox>
+
+            <lightning-button variant="brand" label="Salvar" onclick={salvar}></lightning-button>
+        </div>
+    </lightning-card>
+</template>
