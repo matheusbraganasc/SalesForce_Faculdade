@@ -8,8 +8,9 @@ public with sharing class ProfessorController {
     }
 
     @AuraEnabled
-    public static Id criarCurso(String nomeCurso) {
+    public static Id criarCurso(String nomeCurso, String professorCurso) {
         Curso__c curso = new Curso__c(Name = nomeCurso);
+        curso.Professor__c = professorCurso;
         insert curso;
         return curso.Id;
     }
@@ -17,19 +18,19 @@ public with sharing class ProfessorController {
     @AuraEnabled
     public static void relacionarCursoProfessor(Id professorId, Id cursoId) {
         if (professorId != null && cursoId != null) {
-            Professor__c prof = [SELECT Id FROM Professor__c WHERE Id = :professorId LIMIT 1];
-            prof.Curso__c = cursoId;
-            update prof;
+            curso__c Curs = [SELECT Id FROM curso__c WHERE Id = :cursoId LIMIT 1];
+            Curs.Professor__c = professorId;
+            update Curs;
         }
     }
 
     @AuraEnabled(cacheable=true)
     public static List<Professor__c> getProfessores() {
-        return [SELECT Id, Name, curso__c, curso__r.Name FROM Professor__c ORDER BY Name];
+        return [SELECT Id, Name FROM Professor__c ORDER BY Name];
     }
 
     @AuraEnabled(cacheable=true)
     public static List<Curso__c> getCursos() {
-        return [SELECT Id, Name FROM Curso__c ORDER BY Name];
+        return [SELECT Id, Name, Professor__c, Professor__r.Name FROM Curso__c ORDER BY Name];
     }
 }

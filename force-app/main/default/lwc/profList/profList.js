@@ -5,7 +5,7 @@ export default class ProfList extends LightningElement {
     @track professores = [];
     columns = [
         { label: 'Nome do Professor', fieldName: 'Name' },
-        { label: 'Curso', fieldName: 'Curso' } // campo único agora
+        { label: 'Curso', fieldName: 'Curso' } 
     ];
 
     @wire(getProfessores)

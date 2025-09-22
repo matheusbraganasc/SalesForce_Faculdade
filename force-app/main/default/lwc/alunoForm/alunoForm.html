@@ -3,7 +3,14 @@
         <div class="slds-m-around_medium">
             <lightning-input label="Nome" value={nome} onchange={handleFilterNome}></lightning-input>
 
-            <lightning-input label="Professor" value={professor} onchange={handleFilterProfessor}></lightning-input>
+            <lightning-input label="Registro" value={registroNumero} onchange={handleFilterRegistroNumero}></lightning-input>
+
+            <lightning-combobox
+                label="Selecionar Curso"
+                value={cursoId}
+                options={cursoOptions}
+                onchange={handleSelectCurso}>
+            </lightning-combobox>
 
             <lightning-combobox
                 label="Status da Matrícula"

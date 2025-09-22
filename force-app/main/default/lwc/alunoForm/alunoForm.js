@@ -1,12 +1,17 @@
 import { LightningElement, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import salvarAluno from '@salesforce/apex/AlunoController.salvarAluno';
-import getProfessores from '@salesforce/apex/ProfessorController.getProfessores';
-
+import getCursos from '@salesforce/apex/ProfessorController.getCursos';
+import criarCurso from '@salesforce/apex/ProfessorController.criarCurso';
 export default class AlunoForm extends LightningElement {
     @track nome;
     @track status = 'Ativa';
-    @track professorId;
+    @track cursoId;
+    @track registroNumero;
+    @track nomeCurso = '';
+
+    @wire(getCursos)
+        cursos;
 
     get options() {
         return [
@@ -15,40 +20,34 @@ export default class AlunoForm extends LightningElement {
         ];
     }
 
-    @wire(getProfessores)
-    wiredProfessores;
-
-    get professores() {
-        const { data, error } = this.wiredProfessores || {};
-        if (data) {
-            return data.map(p => ({
-                label: p.Name,
-                value: p.Id
-            }));
-        }
-        if (error) {
-            console.error('Erro ao carregar professores:', error);
-        }
-        return [];
+    get cursoOptions() {
+        return this.cursos?.data
+            ? this.cursos.data.map(c => ({ label: c.Name, value: c.Id }))
+            : [];
     }
 
-    handleFilterNome(e) {
-        this.nome = e.target.value;
+    handleFilterNome(event) {
+        this.nome = event.target.value;
     }
 
-    handleFilterStatus(e) {
-        this.status = e.detail.value;
+    handleFilterStatus(event) {
+        this.status = event.detail.value;
     }
 
-    handleFilterProfessor(e) {
-        this.professorId = e.detail.value;
+    handleFilterRegistroNumero(event) {
+        this.registroNumero = event.target.value;
+    }
+
+    handleSelectCurso(event) {
+        this.cursoId = event.detail.value;
     }
 
     salvar() {
         salvarAluno({
             nome: this.nome,
             statusValue: this.status,
-            professorId: this.professorId
+            cursoId: this.cursoId,
+            registroNumero: this.registroNumero
         })
         .then(id => {
             this.dispatchEvent(new ShowToastEvent({

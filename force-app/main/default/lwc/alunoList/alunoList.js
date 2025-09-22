@@ -18,16 +18,20 @@ export default class AlunoList extends LightningElement {
     columns = [
         { label: 'Nome', fieldName: 'Name' },
         { label: 'Status', fieldName: 'Status__c' },
-        { label: 'Professor', fieldName: 'ProfessorName' }
+        { label: 'Curso', fieldName: 'cursoName' },
+        { label: 'Registro', fieldName: 'registro' }
     ];
 
     @wire(getAlunos, { statusMatricula: '$Status' })
     wiredAlunos(result) {
         this.wiredAlunosResult = result;
         if (result.data) {
-            this.alunos = result.data.map(a => ({
+            this.alunos = result.data.map(a, b => ({
                 ...a,
-                ProfessorName: a.Teacher__r ? a.Teacher__r.Name : ''
+                cursoName: a.curso__r ? a.curso__r.Name : '',
+
+                ...b,
+                registro: b.registros__c ? b.registros__c : 'N/A'
             }));
         } else if (result.error) {
             this.alunos = [];

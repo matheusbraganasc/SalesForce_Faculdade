@@ -6,6 +6,7 @@ import relacionarCursoProfessor from '@salesforce/apex/ProfessorController.relac
 import getProfessores from '@salesforce/apex/ProfessorController.getProfessores';
 import getCursos from '@salesforce/apex/ProfessorController.getCursos';
 
+
 export default class ProfForm extends LightningElement {
     @track nomeProfessor = '';
     @track nomeCurso = '';
