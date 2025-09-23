@@ -5,6 +5,7 @@ import { refreshApex } from '@salesforce/apex';
 export default class AlunoList extends LightningElement {
     @track alunos;
     @track Status = 'Todos';
+    @track registro = '';
     wiredAlunosResult;
 
     get options() {
@@ -26,12 +27,10 @@ export default class AlunoList extends LightningElement {
     wiredAlunos(result) {
         this.wiredAlunosResult = result;
         if (result.data) {
-            this.alunos = result.data.map(a, b => ({
+            this.alunos = result.data.map(a => ({
                 ...a,
-                cursoName: a.curso__r ? a.curso__r.Name : '',
-
-                ...b,
-                registro: b.registros__c ? b.registros__c : 'N/A'
+                cursoName: a.curso__r ? a.curso__r.Name : 'Sem curso',
+                registro: a.registros__c ? a.registros__c : 'Sem registro'
             }));
         } else if (result.error) {
             this.alunos = [];

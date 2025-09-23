@@ -18,7 +18,7 @@ public with sharing class ProfessorController {
     @AuraEnabled
     public static void relacionarCursoProfessor(Id professorId, Id cursoId) {
         if (professorId != null && cursoId != null) {
-            curso__c Curs = [SELECT Id FROM curso__c WHERE Id = :cursoId LIMIT 1];
+            Curso__c Curs = [SELECT Id FROM Curso__c WHERE Id = :cursoId LIMIT 1];
             Curs.Professor__c = professorId;
             update Curs;
         }
@@ -26,7 +26,7 @@ public with sharing class ProfessorController {
 
     @AuraEnabled(cacheable=true)
     public static List<Professor__c> getProfessores() {
-        return [SELECT Id, Name FROM Professor__c ORDER BY Name];
+        return [SELECT Id, Name, (SELECT Name FROM Cursos__r) FROM Professor__c ORDER BY Name];
     }
 
     @AuraEnabled(cacheable=true)
