@@ -1,0 +1,12 @@
+<template>
+    <lightning-card title="Selecionar Professor">
+        <div class="slds-m-around_medium">
+            <lightning-record-picker
+                label="Professor"
+                placeholder="Selecione um professor"
+                object-api-name="Professor__c"
+                onchange={handleProfessorSelecionado}>
+            </lightning-record-picker>
+        </div>
+    </lightning-card>
+</template>

@@ -1,15 +1,15 @@
 <template>
-    <lightning-card title="Lista de Professores e Cursos" icon-name="standard:education">
+    <lightning-card title="Lista de Cursos e Professores" icon-name="standard:education">
         <div class="slds-p-around_medium">
-            <template if:true={hasProfessores}>
+            <template if:true={hasCursos}>
                 <lightning-datatable
                     key-field="Id"
-                    data={professores}
+                    data={cursos}
                     columns={columns}
                 ></lightning-datatable>
             </template>
-            <template if:false={hasProfessores}>
-                <p>Nenhum professor encontrado.</p>
+            <template if:false={hasCursos}>
+                <p>Nenhum curso encontrado.</p>
             </template>
         </div>
     </lightning-card>

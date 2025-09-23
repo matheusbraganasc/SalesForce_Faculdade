@@ -1,0 +1,34 @@
+<template>
+    <lightning-card title="Cursos e Alunos">
+        <template if:true={cursos}>
+            <template for:each={cursos} for:item="curso">
+                <div key={curso.Id} class="slds-m-around_medium">
+                    <lightning-datatable
+                        key-field="Id"
+                        data={curso}
+                        columns={columnsCursos}
+                        hide-checkbox-column
+                    ></lightning-datatable>
+
+                    <lightning-datatable
+                        key-field="Id"
+                        data={curso.Alunos__r}
+                        columns={columnsAlunos}
+                        hide-checkbox-column
+                        class="slds-m-top_small"
+                    ></lightning-datatable>
+                </div>
+            </template>
+        </template>
+
+        <template if:true={error}>
+            <p class="slds-text-color_error slds-m-around_medium">
+                Erro ao carregar cursos: {error.body.message}
+            </p>
+        </template>
+
+        <template if:false={cursos}>
+            <p class="slds-m-around_medium">Nenhum curso encontrado para este professor.</p>
+        </template>
+    </lightning-card>
+</template>

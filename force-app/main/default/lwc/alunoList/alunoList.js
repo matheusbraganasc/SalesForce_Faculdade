@@ -26,16 +26,19 @@ export default class AlunoList extends LightningElement {
     @wire(getAlunos, { statusMatricula: '$Status' })
     wiredAlunos(result) {
         this.wiredAlunosResult = result;
-        if (result.data) {
-            this.alunos = result.data.map(a => ({
-                ...a,
-                cursoName: a.curso__r ? a.curso__r.Name : 'Sem curso',
-                registro: a.registros__c ? a.registros__c : 'Sem registro'
-            }));
-        } else if (result.error) {
-            this.alunos = [];
-            console.error('Erro ao carregar alunos', result.error);
-        }
+            if (Array.isArray(result.data)) {
+                console.log('Dados retornados:', result.data);
+                this.alunos = result.data.map(a => ({
+                    ...a,
+                    cursoName: a.curso__r ? a.curso__r.Name : 'Sem curso',
+                    registro: a.registros__c ? a.registros__c : 'Sem registro'
+                }));
+            } else {
+                this.alunos = [];
+                if (result.error) {
+                    console.error('Erro ao carregar alunos', result.error);
+                }
+            }
     }
 
     handleFilterChange(event) {
