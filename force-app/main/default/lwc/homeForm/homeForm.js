@@ -1,56 +1,62 @@
-import { LightningElement, track, wire } from 'lwc';
-import getProfessores from '@salesforce/apex/ProfessorController.getProfessores';
-import getCursos from '@salesforce/apex/ProfessorController.getCursos';
-import getAlunos from '@salesforce/apex/AlunoController.getAlunos';
+import { LightningElement, track } from 'lwc';
+import getProfessores2 from '@salesforce/apex/homeController.getProfessores2';
+import getCursosDeProfessor from '@salesforce/apex/homeController.getCursosDeProfessor';
+import getAlunosDeCurso from '@salesforce/apex/homeController.getAlunosDeCurso';
 
 export default class HomeForm extends LightningElement {
-    @track professores = [];
-    @track cursos = [];
+    @track professorOptions = [];
+    @track cursoOptions = [];
     @track alunos = [];
-    @track selectedProfessorId = '';
-    @track selectedCursoId = '';
-
-    alunoColumns = [
+    
+    selectedProfessor = '';
+    selectedCurso = '';
+    /*eu não aguento mais*/
+    columns = [
         { label: 'Nome', fieldName: 'Name' },
-        { label: 'Status', fieldName: 'Status__c' }
     ];
 
-    @wire(getProfessores)
-    wiredProfessores({ data, error }) {
-        if (data) {
-            this.professores = data.map(prof => ({
+    connectedCallback() {
+        this.loadProfessores();
+    }
+
+    async loadProfessores() {
+        try {
+            const result = await getProfessores2();
+            this.professorOptions = result.map(prof => ({
                 label: prof.Name,
                 value: prof.Id
             }));
-        } else if (error) {
-            console.error('Erro ao buscar professores:', error);
+        } catch (error) {
+            console.error('Erro ao buscar professores', error);
         }
     }
 
-    handleProfessorChange(event) {
-        this.selectedProfessorId = event.detail.value;
-        this.selectedCursoId = '';
+    async handleProfessorChange(event) {
+        this.selectedProfessor = event.detail.value;
+        this.selectedCurso = '';
+        this.cursoOptions = [];
         this.alunos = [];
-        getCursos()
-            .then(result => {
-                this.cursos = result.filter(curso => curso.Professor__c === this.selectedProfessorId)
-                    .map(curso => ({ label: curso.Name, value: curso.Id }));
-            })
-            .catch(error => {
-                this.cursos = [];
-                console.error('Erro ao buscar cursos:', error);
-            });
+
+        try {
+            const result = await getCursosDeProfessor({ professorId: this.selectedProfessor });
+            this.cursoOptions = result.map(curso => ({
+                label: curso.Name,
+                value: curso.Id
+            }));
+        } catch (error) {
+            console.error('Erro ao buscar cursos', error);
+        }
     }
 
-    handleCursoChange(event) {
-        this.selectedCursoId = event.detail.value;
-        getAlunos({ statusMatricula: 'Todos' })
-            .then(result => {
-                this.alunos = result.filter(aluno => aluno.Curso__c === this.selectedCursoId);
-            })
-            .catch(error => {
-                this.alunos = [];
-                console.error('Erro ao buscar alunos:', error);
-            });
+    async handleCursoChange(event) {
+        this.selectedCurso = event.detail.value;
+        this.alunos = [];
+
+        try {
+            const result = await getAlunosDeCurso({ cursoId: this.selectedCurso });
+            this.alunos = result;
+        } catch (error) {
+            console.error('Erro ao buscar alunos', error);
+        }
     }
 }

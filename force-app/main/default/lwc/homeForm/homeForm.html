@@ -1,38 +1,35 @@
 <template>
-    <lightning-card title="Selecione o Professor" icon-name="standard:people">
+    <lightning-card title="Home Form">
         <div class="slds-p-around_medium">
-            <lightning-record-picker
-                label="Professor"
-                object-api-name="Professor__c"
-                value={selectedProfessorId}
-                onchange={handleProfessorChange}
-                placeholder="Selecione um professor"
-            ></lightning-record-picker>
 
-            <template if:true={selectedProfessorId}>
+            <lightning-combobox
+                name="professor"
+                label="Selecione um Professor"
+                value={selectedProfessor}
+                placeholder="Escolha um professor"
+                options={professorOptions}
+                onchange={handleProfessorChange}>
+            </lightning-combobox>
+ 
+            <template if:true={cursoOptions.length}>
                 <lightning-combobox
                     name="curso"
-                    label="Curso"
-                    value={selectedCursoId}
-                    options={cursos}
-                    onchange={handleCursoChange}
-                    placeholder="Selecione um curso"
-                ></lightning-combobox>
+                    label="Selecione um Curso"
+                    value={selectedCurso}
+                    placeholder="Escolha um curso"
+                    options={cursoOptions}
+                    onchange={handleCursoChange}>
+                </lightning-combobox>
             </template>
 
-            <template if:true={selectedCursoId}>
-                <lightning-card title="Alunos do Curso Selecionado">
-                    <template if:true={alunos.length}>
-                        <lightning-datatable
-                            key-field="Id"
-                            data={alunos}
-                            columns={alunoColumns}
-                        ></lightning-datatable>
-                    </template>
-                    <template if:false={alunos.length}>
-                        <p>Nenhum aluno encontrado para este curso.</p>
-                    </template>
-                </lightning-card>
+            <template if:true={alunos.length}>
+                <h3 class="slds-m-top_medium">Alunos do Curso</h3>
+                <lightning-datatable
+                    key-field="Id"
+                    data={alunos}
+                    columns={columns}
+                    hide-checkbox-column="true">
+                </lightning-datatable>
             </template>
         </div>
     </lightning-card>
