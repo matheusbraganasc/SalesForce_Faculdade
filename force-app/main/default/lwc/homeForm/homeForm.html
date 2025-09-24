@@ -1,12 +1,39 @@
 <template>
-    <lightning-card title="Selecionar Professor">
-        <div class="slds-m-around_medium">
+    <lightning-card title="Selecione o Professor" icon-name="standard:people">
+        <div class="slds-p-around_medium">
             <lightning-record-picker
                 label="Professor"
-                placeholder="Selecione um professor"
                 object-api-name="Professor__c"
-                onchange={handleProfessorSelecionado}>
-            </lightning-record-picker>
+                value={selectedProfessorId}
+                onchange={handleProfessorChange}
+                placeholder="Selecione um professor"
+            ></lightning-record-picker>
+
+            <template if:true={selectedProfessorId}>
+                <lightning-combobox
+                    name="curso"
+                    label="Curso"
+                    value={selectedCursoId}
+                    options={cursos}
+                    onchange={handleCursoChange}
+                    placeholder="Selecione um curso"
+                ></lightning-combobox>
+            </template>
+
+            <template if:true={selectedCursoId}>
+                <lightning-card title="Alunos do Curso Selecionado">
+                    <template if:true={alunos.length}>
+                        <lightning-datatable
+                            key-field="Id"
+                            data={alunos}
+                            columns={alunoColumns}
+                        ></lightning-datatable>
+                    </template>
+                    <template if:false={alunos.length}>
+                        <p>Nenhum aluno encontrado para este curso.</p>
+                    </template>
+                </lightning-card>
+            </template>
         </div>
     </lightning-card>
 </template>
