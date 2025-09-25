@@ -10,7 +10,7 @@ export default class HomeForm extends LightningElement {
     
     selectedProfessor = '';
     selectedCurso = '';
-    /*eu não aguento mais*/
+
     columns = [
         { label: 'Nome', fieldName: 'Name' },
     ];
