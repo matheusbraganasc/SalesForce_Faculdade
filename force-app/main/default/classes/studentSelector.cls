@@ -3,4 +3,5 @@ public interface studentSelector {
     schema.SObjectType getSObjectType();
     List<schema.SObjectField> getSObjectFieldList();
     List<Aluno__c> selectById(List<Id> idset);
+    Map<Id, Integer> contarAlunosAtivosPorCurso(Set<Id> cursoIds);
 }
