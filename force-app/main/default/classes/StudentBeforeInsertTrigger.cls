@@ -9,7 +9,11 @@ public with sharing class StudentBeforeInsertTrigger implements TriggerHandler {
 
             get{
                   if(this.instancestudentService == null) {
-                        this.instancestudentService = (studentService) di_Injector.Org.getInstance('studentServiceIMPL');
+                        try {
+                            this.instancestudentService = (studentService) di_Injector.Org.getInstance('studentServiceIMPL');
+                        } catch (Exception e) {
+                            this.instancestudentService = new studentServiceIMPL();
+                        }
                   }
                   return instancestudentService;
             }

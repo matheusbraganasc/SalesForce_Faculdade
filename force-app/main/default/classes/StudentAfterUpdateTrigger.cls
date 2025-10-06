@@ -14,14 +14,27 @@ public with sharing class StudentAfterUpdateTrigger implements TriggerHandler {
         }
 
         if (!alunosQueAlteraramStatus.isEmpty()) {
+            List<Aluno__c> novos = new List<Aluno__c>();
+            List<Aluno__c> antigos = new List<Aluno__c>();
+            for (Integer i = 0; i < alunosQueAlteraramStatus.size(); i += 2) {
+                Aluno__c n = alunosQueAlteraramStatus[i];
+                Aluno__c a = alunosQueAlteraramStatus[i+1];
+                novos.add(n);
+                antigos.add(a);
+            }
             this.instancestudentService.atualizarQtdAlunosPorCurso(alunosQueAlteraramStatus);
+            this.instancestudentService.notificarProfessorAlunoInativo(novos, antigos);
         }
     }
 
     private studentService instancestudentService {
         get {
             if (this.instancestudentService == null) {
-                this.instancestudentService = (studentService) di_Injector.Org.getInstance('studentServiceIMPL');
+                try {
+                    this.instancestudentService = (studentService) di_Injector.Org.getInstance('studentServiceIMPL');
+                } catch (Exception e) {
+                    this.instancestudentService = new studentServiceIMPL();
+                }
             }
             return instancestudentService;
         }

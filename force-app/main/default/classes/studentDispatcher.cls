@@ -8,6 +8,7 @@ public with sharing class studentDispatcher implements triggerDispatcher {
                 InstanceTriggerHandler = (TriggerHandler) di_Injector.Org.getInstance('StudentBeforeInsertTrigger');
             }
         }
+        
 
         if (Trigger.isAfter) {
             if (Trigger.isInsert){
