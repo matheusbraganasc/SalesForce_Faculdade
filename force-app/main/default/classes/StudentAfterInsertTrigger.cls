@@ -3,6 +3,10 @@ public with sharing class StudentAfterInsertTrigger implements TriggerHandler {
         this.instancestudentService.atualizarQtdAlunosPorCurso(Trigger.new);
     }
 
+    public void professorPadrãoEmCursoSemProfessor(List<Curso__c> cursos) {
+        this.instancestudentService.professorPadrãoEmCursoSemProfessor(cursos);
+    }
+
     private studentService instancestudentService {
         get {
             if (this.instancestudentService == null) {

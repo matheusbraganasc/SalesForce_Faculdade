@@ -16,6 +16,24 @@ public with sharing class studentServiceIMPL implements studentService {
 
     }
 
+    public void professorPadrãoEmCursoSemProfessor(List<Curso__c> cursos) {
+        if (cursos.isEmpty()) return;
+
+        User usuarioPadrao = [SELECT Id FROM User WHERE IsActive = true AND Profile.Name = 'Standard User' LIMIT 1];
+
+        List<Curso__c> cursosParaAtualizar = new List<Curso__c>();
+        for (Curso__c c : cursos) {
+            if (c.Professor__c == null) {
+                c.Professor__c = usuarioPadrao.Id;
+                cursosParaAtualizar.add(c);
+            }
+        }
+
+        if (!cursosParaAtualizar.isEmpty()) {
+            update cursosParaAtualizar;
+        }
+    }
+
     public void atualizarQtdAlunosPorCurso(List<Aluno__c> alunos) {
     Set<Id> cursoIds = new Set<Id>();
 
@@ -43,7 +61,6 @@ public with sharing class studentServiceIMPL implements studentService {
     update cursosParaAtualizar;
 }
     public void notificarProfessorAlunoInativo(List<Aluno__c> novos, List<Aluno__c> antigos) {
-        // Agrupa alunos que passaram de Ativa -> Inativa por Curso
         Map<Id, List<Aluno__c>> alunosPorCurso = new Map<Id, List<Aluno__c>>();
 
         for (Integer i = 0; i < novos.size(); i++) {
@@ -59,11 +76,9 @@ public with sharing class studentServiceIMPL implements studentService {
 
         if (alunosPorCurso.isEmpty()) return;
 
-        // Buscar cursos e professor (usar Prof_Email__c como campo de e-mail do professor)
         Set<Id> cursoIds = alunosPorCurso.keySet();
         List<Curso__c> cursos = [SELECT Id, Name, Professor__c, Professor__r.Name, Professor__r.Prof_Email__c FROM Curso__c WHERE Id IN :cursoIds];
 
-        // Agrupar por professor
         Map<Id, List<Aluno__c>> alunosPorProfessor = new Map<Id, List<Aluno__c>>();
         Map<Id, String> emailPorProfessor = new Map<Id, String>();
         Map<Id, String> nomeProfessor = new Map<Id, String>();
